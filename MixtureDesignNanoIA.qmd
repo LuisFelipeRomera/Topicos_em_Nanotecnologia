@@ -1,0 +1,1027 @@
+---
+title: "Nano IA Mixture Designs"
+author: "Luís Felipe Romera"
+format: html
+editor: visual
+---
+
+In this document, I'm going to perform **mixture designs** on the formulation data of the different *nanoparticles* based on amazonian lipids.
+
+First I'm going to explore the **PDI** measurement, than I'm going to explore the nanoparticle's **size**.
+
+# PDI
+
+## Nano Bacuri-Açaí
+
+```{r}
+#| message: false
+#| warning: false
+
+setwd("C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/planilhas")
+
+bacuriAcai <- read.csv("C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/planilhas/NanoBacuriAcai.csv")
+
+head(bacuriAcai)
+
+library(mixexp)
+
+bacuriAcaiVar <- c("Bacuri", "Acai", "Brijo10")
+
+bacuriAcaiMod1 <- MixModel(bacuriAcai, "PDI", bacuriAcaiVar, 1)
+
+summary(bacuriAcaiMod1)
+
+anova(bacuriAcaiMod1)
+
+bacuriAcaiMod2 <- MixModel(bacuriAcai, "PDI", bacuriAcaiVar, 2)
+
+summary(bacuriAcaiMod2)
+
+anova(bacuriAcaiMod2)
+
+bacuriAcaiMod3 <- MixModel(bacuriAcai, "PDI", bacuriAcaiVar, 4)
+
+summary(bacuriAcaiMod3)
+
+anova(bacuriAcaiMod3)
+
+anova(bacuriAcaiMod1, bacuriAcaiMod2)
+
+anova(bacuriAcaiMod1, bacuriAcaiMod3)
+
+summary(bacuriAcaiMod1)
+
+par(mfrow = c(2,2))
+
+plot(bacuriAcaiMod1)
+```
+
+### Results PDI Bacuri-Açaí
+
+The model that fitted the PDI data the best was the linear model. Bacuri is the only variable to have a significant effect on the model. With a positive coefficient of 2.34 on an Adjusted R-Squared of 0.93.
+
+## Nano Bacuri-Pracaxi
+
+```{r}
+bacuriPracaxi <- read.csv("C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/planilhas/NanoBacuriPracaxi.csv")
+
+head(bacuriPracaxi)
+
+bacuriPracaxiVar <-  c("Bacuri", "Pracaxi", "Brijo10")
+
+bacuriPracaxiMod1 <- MixModel(bacuriPracaxi, "PDI", bacuriPracaxiVar, 1)
+
+summary(bacuriPracaxiMod1)
+
+anova(bacuriPracaxiMod1)
+
+bacuriPracaxiMod2 <- MixModel(bacuriPracaxi, "PDI", bacuriPracaxiVar, 2)
+
+summary(bacuriPracaxiMod2)
+
+anova(bacuriPracaxiMod2)
+
+bacuriPracaxiMod3 <- MixModel(bacuriPracaxi, "PDI", bacuriPracaxiVar, 3)
+
+summary(bacuriPracaxiMod3)
+
+anova(bacuriPracaxiMod3)
+
+anova(bacuriPracaxiMod1,bacuriPracaxiMod2)
+
+anova(bacuriPracaxiMod1, bacuriPracaxiMod3)
+
+summary(bacuriPracaxiMod1)
+
+par(mfrow = c(2, 2))
+
+plot(bacuriAcaiMod1)
+```
+
+### Results PDI Nano Bacuri-Pracaxi
+
+The model that best fit the data is the linear model, with Brij O10 being the only parameter that contributes individually for the model (Pr(t) \< 0.05), although both Brij O10 and Bacuri are paramenters that explain the data better than a reduced model (Pr(F) \< 0.05), with an estimate of 1.57 and -0.1, respectively.
+
+## Nano Cacau-Tucumã
+
+```{r}
+#| warning: false
+#| message: false
+
+cacauTucuma <- read.csv("C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/planilhas/NanoCacauTucuma.csv")
+
+head(cacauTucuma)
+
+cacauTucumaVar <- c("Cacau", "Tucuma", "Brijo10")
+
+cacauTucumaMod1 <- MixModel(cacauTucuma, "PDI", cacauTucumaVar, 1)
+
+summary(cacauTucumaMod1)
+
+anova(cacauTucumaMod1)
+
+cacauTucumaMod2 <- MixModel(cacauTucuma, "PDI", cacauTucumaVar, 2)
+
+summary(cacauTucumaMod2)
+
+anova(cacauTucumaMod1)
+
+cacauTucumaMod3 <- MixModel(cacauTucuma, "PDI", cacauTucumaVar, 3)
+
+summary(cacauTucumaMod3)
+
+anova(cacauTucumaMod3)
+
+anova(cacauTucumaMod1, cacauTucumaMod2)
+
+anova(cacauTucumaMod1, cacauTucumaMod3)
+
+par(mfrow = c(2, 2))
+
+plot(cacauTucumaMod1)
+```
+
+### Results PDI Nano Cacau-Tucumã
+
+No model fitted the data well (best determinant coefficient = 0.06)
+
+## Nano Cupuaçu-Açaí
+
+```{r}
+#| warning: false
+#| message: false
+
+cupuacuAcai <- read.csv("C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/planilhas/NanoCupuacuAcai.csv")
+
+head(cupuacuAcai)
+
+cupuacuAcaiVar <- c("Cupuacu", "Acai", "Brijo10")
+
+cupuacuAcaiMod1 <- MixModel(cupuacuAcai, "PDI", cupuacuAcaiVar, 1)
+
+summary(cupuacuAcaiMod1)
+
+anova(cupuacuAcaiMod1)
+
+cupuacuAcaiMod2 <- MixModel(cupuacuAcai, "PDI", cupuacuAcaiVar, 2)
+
+summary(cupuacuAcaiMod2)
+
+anova(cupuacuAcaiMod2)
+
+cupuacuAcaiMod3 <- MixModel(cupuacuAcai, "PDI", cupuacuAcaiVar, 3)
+
+summary(cupuacuAcaiMod3)
+
+anova(cupuacuAcaiMod3)
+
+anova(cupuacuAcaiMod1, cupuacuAcaiMod2)
+
+anova(cupuacuAcaiMod1, cupuacuAcaiMod3)
+
+par(mfrow = c(2, 2))
+
+plot(cupuacuAcaiMod1)
+```
+
+### Results PDI Nano Cupuaçu-Açaí
+
+The model that best fitted the data was the linear model. Açaí was the only parameter that explains the variance alone, although it, along Cupuaçu, explains the variance better than a simpler model, with an estimate of 1.16 and 0.7, respectively.
+
+## Nano Cupuaçu-Cacau
+
+```{r}
+#| warning: false
+#| message: false
+
+cupuacuCacau <- read.csv("C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/planilhas/NanoCupuacuCacau.csv")
+
+head(cupuacuCacau)
+
+cupuacuCacauVar <- c("Cupuacu", "Cacau", "Brijo10")
+
+cupuacuCacauMod1 <- MixModel(cupuacuCacau, "PDI", cupuacuCacauVar, 1)
+
+summary(cupuacuCacauMod1)
+
+anova(cupuacuCacauMod1)
+
+cupuacuCacauMod2 <- MixModel(cupuacuCacau, "PDI", cupuacuCacauVar, 2)
+
+summary(cupuacuCacauMod2)
+
+anova(cupuacuCacauMod2)
+
+anova(cupuacuCacauMod1, cupuacuCacauMod2)
+
+par(mfrow = c(2, 2))
+
+plot(cupuacuCacauMod1)
+```
+
+### Results PDI Cupuaçu-Cacau
+
+The model that fitted the data the best was the linear model, with a determinant coefficient of 0.75 and with Cupuaçu being the only parameter that contributes alone to the model and that explains the variance better than a reduced model.
+
+## Nano Cupuaçu-Pequi
+
+```{r}
+#| warning: false
+#| message: false
+
+cupuacuPequi <- read.csv("C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/planilhas/NanoCupuacuPequi.csv")
+
+head(cupuacuPequi)
+
+cupuacuPequiVar <- c("Cupuacu", "Pequi", "Brijo10")
+
+cupuacuPequiMod1 <- MixModel(cupuacuPequi, "PDI", cupuacuPequiVar, 1)
+
+summary(cupuacuPequiMod1)
+
+anova(cupuacuPequiMod1)
+
+cupuacuPequiMod2 <- MixModel(cupuacuPequi, "PDI", cupuacuPequiVar, 2)
+
+summary(cupuacuPequiMod2)
+
+anova(cupuacuPequiMod2)
+
+cupuacuPequiMod3 <- MixModel(cupuacuPequi, "PDI", cupuacuPequiVar, 4)
+
+summary(cupuacuPequiMod3)
+
+anova(cupuacuPequiMod3)
+
+anova(cupuacuPequiMod1, cupuacuPequiMod2)
+
+anova(cupuacuPequiMod1, cupuacuPequiMod3)
+
+par(mfrow = c(2, 2))
+
+plot(cupuacuPequiMod2)
+
+cupuacuPequi$ponto <- interaction(
+  cupuacuPequi$Cupuacu,
+  cupuacuPequi$Pequi,
+  cupuacuPequi$Brijo10
+)
+
+modScheffe <- lm(
+  PDI ~ Cupuacu + Pequi + Brijo10 +
+    Cupuacu:Pequi + Cupuacu:Brijo10 + Pequi:Brijo10 - 1,
+  data = cupuacuPequi
+)
+
+mod_sat <- lm(
+  PDI ~ ponto,
+  data = cupuacuPequi
+)
+
+
+#Lack of Fit test
+anova(modScheffe, mod_sat)
+```
+
+### Results PDI Cupuaçu-Pequi
+
+The quadratic model was chosen to fit the data with an **adjusted R² = 0.91**, and with the interaction of Cupuaçuu and Pequi with an estimator of **- 3.91**.
+
+## Nano Cupuaçu-Tucumã
+
+```{r}
+
+#| warning: false
+#| message: false
+
+cupuacuTucuma <- read.csv("C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/planilhas/NanoCupuacuTucuma.csv")
+
+head(cupuacuTucuma)
+
+cupuacuTucumaVar <- c("Cupuacu", "Tucuma", "Brijo10")
+
+cupuacuTucumaMod1 <- MixModel(cupuacuTucuma, "PDI", cupuacuTucumaVar, 1)
+
+summary(cupuacuTucumaMod1)
+
+anova(cupuacuTucumaMod1)
+
+cupuacuTucumaMod2 <- MixModel(cupuacuTucuma, "PDI", cupuacuTucumaVar, 2)
+
+summary(cupuacuTucumaMod2)
+
+anova(cupuacuTucumaMod2)
+
+#cupuacuPequiMod3 <- MixModel(cupuacuPequi, "PDI", cupuacuPequiVar, 4)
+
+#summary(cupuacuPequiMod3)
+
+#anova(cupuacuPequiMod3)
+
+anova(cupuacuTucumaMod1, cupuacuTucumaMod2)
+
+#anova(cupuacuPequiMod1, cupuacuPequiMod3)
+
+par(mfrow = c(2, 2))
+
+plot(cupuacuTucumaMod1)
+
+cupuacuTucuma$ponto <- interaction(
+  cupuacuTucuma$Cupuacu,
+  cupuacuTucuma$Tucuma,
+  cupuacuTucuma$Brijo10
+)
+
+#modScheffe <- lm(
+#  PDI ~ Cupuacu + Pequi + Brijo10 +
+#    Cupuacu:Pequi + Cupuacu:Brijo10 + Pequi:Brijo10 - 1,
+#  data = cupuacuPequi
+#)
+
+modSat <- lm(
+  PDI ~ ponto,
+  data = cupuacuTucuma
+)
+
+
+#Lack of Fit test
+anova(cupuacuTucumaMod1, modSat)
+
+View(cupuacuTucuma)
+```
+
+### Results
+
+The linear model was chosen to fit the data
+
+## Nano Manga-Andiroba
+
+```{r}
+#| warning: false
+#| message: false
+
+mangaAndiroba <- read.csv("C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/planilhas/NanoMangaAndiroba.csv")
+
+head(mangaAndiroba)
+
+mangaAndirobaVar <- c("Manga", "Andiroba", "Brijo10")
+
+mangaAndirobaMod1 <- MixModel(mangaAndiroba, "PDI", mangaAndirobaVar, 1)
+
+summary(mangaAndirobaMod1)
+
+anova(mangaAndirobaMod1)
+
+mangaAndirobaMod2 <- MixModel(mangaAndiroba, "PDI", mangaAndirobaVar, 2)
+
+summary(mangaAndirobaMod2)
+
+anova(mangaAndirobaMod2)
+
+#cupuacuPequiMod3 <- MixModel(cupuacuPequi, "PDI", cupuacuPequiVar, 4)
+
+#summary(cupuacuPequiMod3)
+
+#anova(cupuacuPequiMod3)
+
+anova(mangaAndirobaMod1, mangaAndirobaMod2)
+
+#anova(cupuacuPequiMod1, cupuacuPequiMod3)
+
+par(mfrow = c(2, 2))
+
+plot(mangaAndirobaMod1)
+
+mangaAndiroba$ponto <- interaction(
+  mangaAndiroba$Manga,
+  mangaAndiroba$Andiroba,
+  mangaAndiroba$Brijo10
+)
+
+#modScheffe <- lm(
+#  PDI ~ Cupuacu + Pequi + Brijo10 +
+#    Cupuacu:Pequi + Cupuacu:Brijo10 + Pequi:Brijo10 - 1,
+#  data = cupuacuPequi
+#)
+
+modSat <- lm(
+  PDI ~ ponto,
+  data = mangaAndiroba
+)
+
+
+#Lack of Fit test
+anova(mangaAndirobaMod1, modSat)
+
+View(cupuacuTucuma)
+```
+
+### Results
+
+The **Linear Model** was chosen to fit the data.
+
+## Nano Manga-Pracaxi
+
+```{r}
+#| warning: false
+#| message: false
+
+mangaPracaxi <- read.csv("C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/planilhas/NanoMangaPracaxi.csv")
+
+#head(mangaAndiroba)
+
+mangaPracaxiVar <- c("Manga", "Pracaxi", "Brijo10")
+
+mangaPracaxiMod1 <- MixModel(mangaPracaxi, "PDI", mangaPracaxiVar, 1)
+
+summary(mangaPracaxiMod1)
+
+anova(mangaPracaxiMod1)
+
+mangaPracaxiMod2 <- MixModel(mangaPracaxi, "PDI", mangaPracaxiVar, 2)
+
+summary(mangaPracaxiMod2)
+
+anova(mangaPracaxiMod2)
+
+#cupuacuPequiMod3 <- MixModel(cupuacuPequi, "PDI", cupuacuPequiVar, 4)
+
+#summary(cupuacuPequiMod3)
+
+#anova(cupuacuPequiMod3)
+
+anova(mangaPracaxiMod1, mangaPracaxiMod2)
+
+#anova(cupuacuPequiMod1, cupuacuPequiMod3)
+
+par(mfrow = c(2, 2))
+
+plot(mangaPracaxiMod1)
+
+mangaPracaxi$ponto <- interaction(
+  mangaPracaxi$Manga,
+  mangaPracaxi$Pracaxi,
+  mangaPracaxi$Brijo10
+)
+
+#modScheffe <- lm(
+#  PDI ~ Cupuacu + Pequi + Brijo10 +
+#    Cupuacu:Pequi + Cupuacu:Brijo10 + Pequi:Brijo10 - 1,
+#  data = cupuacuPequi
+#)
+
+modSat <- lm(
+  PDI ~ ponto,
+  data = mangaPracaxi
+)
+
+
+#Lack of Fit test
+anova(mangaAndirobaMod1, modSat)
+
+#View(cupuacuTucuma)
+```
+
+### Results
+
+The **Linear Model** was chosen to fit the data.
+
+## Nano Murumuru-Açaí
+
+```{r}
+#| warning: false
+#| message: false
+
+murumuruAcai <- read.csv("C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/planilhas/NanoMurumuruAcai.csv")
+
+#head(mangaAndiroba)
+
+murumuruAcaiVar <- c("Murumuru", "Acai", "Brijo10")
+
+murumuruAcaiMod1 <- MixModel(murumuruAcai, "PDI", murumuruAcaiVar, 1)
+
+summary(murumuruAcaiMod1)
+
+anova(murumuruAcaiMod1)
+
+murumuruAcaiMod2 <- MixModel(murumuruAcai, "PDI", murumuruAcaiVar, 2)
+
+summary(murumuruAcaiMod2)
+
+anova(murumuruAcaiMod2)
+
+#cupuacuPequiMod3 <- MixModel(cupuacuPequi, "PDI", cupuacuPequiVar, 4)
+
+#summary(cupuacuPequiMod3)
+
+#anova(cupuacuPequiMod3)
+
+anova(murumuruAcaiMod1, murumuruAcaiMod2)
+
+#anova(cupuacuPequiMod1, cupuacuPequiMod3)
+
+par(mfrow = c(2, 2))
+
+plot(murumuruAcaiMod2)
+
+murumuruAcai$ponto <- interaction(
+  murumuruAcai$Murumuru,
+  murumuruAcai$Acai,
+  murumuruAcai$Brijo10
+)
+
+modScheffe <- lm(
+  PDI ~ Murumuru + Acai + Brijo10 +
+    Murumuru:Acai + Murumuru:Brijo10 + Acai:Brijo10 - 1,
+  data = murumuruAcai
+)
+
+modSat <- lm(
+  PDI ~ ponto,
+  data = murumuruAcai
+)
+
+
+#Lack of Fit test
+anova(modScheffe, modSat)
+
+View(murumuruAcai)
+```
+
+### Results
+
+We were not able to fit a model.
+
+## Nano Murumuru-Buriti
+
+```{r}
+#| warning: false
+#| message: false
+
+murumuruBuriti <- read.csv("C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/planilhas/NanoMurumuruBuriti.csv")
+
+#head(mangaAndiroba)
+
+murumuruBuritiVar <- c("Murumuru", "Buriti", "Brijo10")
+
+murumuruBuritiMod1 <- MixModel(murumuruBuriti, "PDI", murumuruBuritiVar, 1)
+
+summary(murumuruBuritiMod1)
+
+anova(murumuruBuritiMod1)
+
+murumuruBuritiMod2 <- MixModel(murumuruBuriti, "PDI", murumuruBuritiVar, 2)
+
+summary(murumuruBuritiMod2)
+
+anova(murumuruBuritiMod2)
+
+#cupuacuPequiMod3 <- MixModel(cupuacuPequi, "PDI", cupuacuPequiVar, 4)
+
+#summary(cupuacuPequiMod3)
+
+#anova(cupuacuPequiMod3)
+
+anova(murumuruBuritiMod1, murumuruBuritiMod2)
+
+#anova(cupuacuPequiMod1, cupuacuPequiMod3)
+
+par(mfrow = c(2, 2))
+
+plot(murumuruAcaiMod2)
+
+murumuruBuriti$ponto <- interaction(
+  murumuruBuriti$Murumuru,
+  murumuruBuriti$Buriti,
+  murumuruBuriti$Brijo10
+)
+
+modScheffe <- lm(
+  PDI ~ Murumuru + Acai + Brijo10 +
+    Murumuru:Acai + Murumuru:Brijo10 + Acai:Brijo10 - 1,
+  data = murumuruAcai
+)
+
+modSat <- lm(
+  PDI ~ ponto,
+  data = murumuruBuriti
+)
+
+
+#Lack of Fit test
+anova(murumuruBuritiMod1, modSat)
+
+View(murumuruBuriti)
+```
+
+### Results
+
+No model was fitted to the data.
+
+## Nano Murumuru-Cupuaçu
+
+```{r}
+#| warning: false
+#| message: false
+
+murumuruCupuacu <- read.csv("C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/planilhas/NanoMurumuruCupuacu.csv")
+
+head(murumuruCupuacu)
+
+murumuruCupuacu$Cupuacu <- murumuruCupuacu$Cupuaçu
+
+murumuruCupuacuVar <- c("Murumuru", "Cupuacu", "Brijo10")
+
+murumuruCupuacuMod1 <- MixModel(murumuruCupuacu, "PDI", murumuruCupuacuVar, 1)
+
+summary(murumuruCupuacuMod1)
+
+anova(murumuruCupuacuMod1)
+
+murumuruCupuacuMod2 <- MixModel(murumuruCupuacu, "PDI", murumuruCupuacuVar, 2)
+
+summary(murumuruCupuacuMod2)
+
+anova(murumuruCupuacuMod2)
+
+#cupuacuPequiMod3 <- MixModel(cupuacuPequi, "PDI", cupuacuPequiVar, 4)
+
+#summary(cupuacuPequiMod3)
+
+#anova(cupuacuPequiMod3)
+
+anova(murumuruCupuacuMod1, murumuruCupuacuMod2)
+
+#anova(cupuacuPequiMod1, cupuacuPequiMod3)
+
+par(mfrow = c(2, 2))
+
+plot(murumuruAcaiMod2)
+
+murumuruCupuacu$ponto <- interaction(
+  murumuruCupuacu$Murumuru,
+  murumuruCupuacu$Cupuacu,
+  murumuruCupuacu$Brijo10
+)
+
+modScheffe <- lm(
+  PDI ~ Murumuru + Acai + Brijo10 +
+    Murumuru:Acai + Murumuru:Brijo10 + Acai:Brijo10 - 1,
+  data = murumuruAcai
+)
+
+modSat <- lm(
+  PDI ~ ponto,
+  data = murumuruCupuacu
+)
+
+
+#Lack of Fit test
+anova(murumuruCupuacuMod1, modSat)
+
+View(murumuruBuriti)
+```
+
+### Results
+
+The **Quadratic model** was chosen to fit the data.
+
+## Nano Murumuru-Jambu
+
+```{r}
+#| warning: false
+#| message: false
+
+murumuruJambu <- read.csv("C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/planilhas/NanoMurumuruJambu.csv")
+
+#head(murumuruJambu)
+
+#murumuruCupuacu$Cupuacu <- murumuruCupuacu$Cupuaçu
+
+murumuruJambuVar <- c("Murumuru", "Jambu", "Brijo10")
+
+murumuruJambuMod1 <- MixModel(murumuruJambu, "PDI", murumuruJambuVar, 1)
+
+summary(murumuruJambuMod1)
+
+anova(murumuruJambuMod1)
+
+murumuruJambuMod2 <- MixModel(murumuruJambu, "PDI", murumuruJambuVar, 2)
+
+summary(murumuruJambuMod2)
+
+anova(murumuruJambuMod2)
+
+#cupuacuPequiMod3 <- MixModel(cupuacuPequi, "PDI", cupuacuPequiVar, 4)
+
+#summary(cupuacuPequiMod3)
+
+#anova(cupuacuPequiMod3)
+
+anova(murumuruJambuMod1, murumuruJambuMod2)
+
+#anova(cupuacuPequiMod1, cupuacuPequiMod3)
+
+par(mfrow = c(2, 2))
+
+plot(murumuruAcaiMod2)
+
+murumuruJambu$ponto <- interaction(
+  murumuruJambu$Murumuru,
+  murumuruJambu$Jambu,
+  murumuruJambu$Brijo10
+)
+
+modScheffe <- lm(
+  PDI ~ Murumuru + Acai + Brijo10 +
+    Murumuru:Acai + Murumuru:Brijo10 + Acai:Brijo10 - 1,
+  data = murumuruAcai
+)
+
+modSat <- lm(
+  PDI ~ ponto,
+  data = murumuruJambu
+)
+
+
+#Lack of Fit test
+anova(murumuruJambuMod1, modSat)
+
+#View(murumuruBuriti)
+```
+
+### Results
+
+The **Linear model** was chosen to fit the data.
+
+## Nano Tucumã-Tucumã
+
+```{r}
+#| warning: false
+#| message: false
+
+tucumaTucuma <- read.csv("C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/planilhas/NanoTucumaTucuma.csv")
+
+head(tucumaTucuma)
+
+#murumuruCupuacu$Cupuacu <- murumuruCupuacu$Cupuaçu
+
+tucumaTucumaVar <- c("Tucuma", "Tucuma.1", "Brijo10")
+
+tucumaTucumaMod1 <- MixModel(tucumaTucuma, "PDI", tucumaTucumaVar, 1)
+
+summary(tucumaTucumaMod1)
+
+anova(tucumaTucumaMod1)
+
+tucumaTucumaMod2 <- MixModel(tucumaTucuma, "PDI", tucumaTucumaVar, 2)
+
+summary(tucumaTucumaMod2)
+
+anova(tucumaTucumaMod2)
+
+#cupuacuPequiMod3 <- MixModel(cupuacuPequi, "PDI", cupuacuPequiVar, 4)
+
+#summary(cupuacuPequiMod3)
+
+#anova(cupuacuPequiMod3)
+
+anova(tucumaTucumaMod1, tucumaTucumaMod2)
+
+#anova(cupuacuPequiMod1, cupuacuPequiMod3)
+
+par(mfrow = c(2, 2))
+
+plot(tucumaTucumaMod2)
+
+tucumaTucuma$ponto <- interaction(
+  tucumaTucuma$Tucuma,
+  tucumaTucuma$Tucuma.1,
+  tucumaTucuma$Brijo10
+)
+
+modScheffe <- lm(
+  PDI ~ Murumuru + Acai + Brijo10 +
+    Murumuru:Acai + Murumuru:Brijo10 + Acai:Brijo10 - 1,
+  data = murumuruAcai
+)
+
+modSat <- lm(
+  PDI ~ ponto,
+  data = tucumaTucuma
+)
+
+
+#Lack of Fit test
+anova(tucumaTucumaMod2, modSat)
+
+#View(murumuruBuriti)
+```
+
+### Results
+
+The **Quadratic Model** was chosen to fit the data.
+
+## Nano Tucumã-Urucum
+
+```{r}
+#| warning: false
+#| message: false
+
+tucumaUrucum <- read.csv("C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/planilhas/NanoTucumaUrucum.csv")
+
+#head(tucumaTucuma)
+
+#murumuruCupuacu$Cupuacu <- murumuruCupuacu$Cupuaçu
+
+tucumaUrucumVar <- c("Tucuma", "Urucum", "Brijo10")
+
+tucumaUrucumMod1 <- MixModel(tucumaUrucum, "PDI", tucumaUrucumVar, 1)
+
+summary(tucumaUrucumMod1)
+
+anova(tucumaUrucumMod1)
+
+tucumaUrucumMod2 <- MixModel(tucumaUrucum, "PDI", tucumaUrucumVar, 2)
+
+summary(tucumaUrucumMod2)
+
+anova(tucumaUrucumMod2)
+
+tucumaUrucumMod3 <- MixModel(tucumaUrucum, "PDI", tucumaUrucumVar, 4)
+
+#summary(cupuacuPequiMod3)
+
+#anova(cupuacuPequiMod3)
+
+anova(tucumaUrucumMod1, tucumaUrucumMod2)
+
+#anova(cupuacuPequiMod1, cupuacuPequiMod3)
+
+par(mfrow = c(2, 2))
+
+plot(tucumaTucumaMod2)
+
+tucumaTucuma$ponto <- interaction(
+  tucumaTucuma$Tucuma,
+  tucumaTucuma$Tucuma.1,
+  tucumaTucuma$Brijo10
+)
+
+modScheffe <- lm(
+  PDI ~ Murumuru + Acai + Brijo10 +
+    Murumuru:Acai + Murumuru:Brijo10 + Acai:Brijo10 - 1,
+  data = murumuruAcai
+)
+
+modSat <- lm(
+  PDI ~ ponto,
+  data = tucumaTucuma
+)
+
+
+#Lack of Fit test
+anova(tucumaTucumaMod2, modSat)
+
+#View(murumuruBuriti)
+```
+
+### Results
+
+The **Linear Model** was chosen to fit the data
+
+## Nano Ucuuba-Andiroba
+
+```{r}
+#| warning: false
+#| message: false
+
+ucuubaAndiroba <- read.csv("C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/planilhas/NanoUcuubaAndiroba.csv")
+
+head(ucuubaAndiroba)
+
+ucuubaAndiroba$Andiroba <- ucuubaAndiroba$Pracaxi
+
+ucuubaAndirobaVar <- c("Ucuuba", "Andiroba", "Brijo10")
+
+ucuubaAndirobaMod1 <- MixModel(ucuubaAndiroba, "PDI", ucuubaAndirobaVar, 1)
+
+summary(ucuubaAndirobaMod1)
+
+anova(ucuubaAndirobaMod1)
+
+ucuubaAndirobaMod2 <- MixModel(ucuubaAndiroba, "PDI", ucuubaAndirobaVar, 2)
+
+summary(ucuubaAndirobaMod2)
+
+anova(ucuubaAndirobaMod2)
+
+#tucumaUrucumMod3 <- MixModel(tucumaUrucum, "PDI", tucumaUrucumVar, 4)
+
+#summary(cupuacuPequiMod3)
+
+#anova(cupuacuPequiMod3)
+
+anova(ucuubaAndirobaMod1, ucuubaAndirobaMod2)
+
+#anova(cupuacuPequiMod1, cupuacuPequiMod3)
+
+par(mfrow = c(2, 2))
+
+#plot(tucumaTucumaMod2)
+
+ucuubaAndiroba$ponto <- interaction(
+  ucuubaAndiroba$Ucuuba,
+  ucuubaAndiroba$Andiroba,
+  ucuubaAndiroba$Brijo10
+)
+
+modScheffe <- lm(
+  PDI ~ Murumuru + Acai + Brijo10 +
+    Murumuru:Acai + Murumuru:Brijo10 + Acai:Brijo10 - 1,
+  data = murumuruAcai
+)
+
+modSat <- lm(
+  PDI ~ ponto,
+  data = ucuubaAndiroba
+)
+
+
+#Lack of Fit test
+anova(ucuubaAndirobaMod1, modSat)
+
+#View(murumuruBuriti)
+```
+
+### Results
+
+The **Linear Model** was chosen to fit the data.
+
+## Nano Ucuuba-Buriti
+
+```{r}
+#| warning: false
+#| message: false
+
+ucuubaBuriti <- read.csv("C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/planilhas/NanoUcuubaBuriti.csv")
+
+head(ucuubaBuriti)
+
+#ucuubaAndiroba$Andiroba <- ucuubaAndiroba$Pracaxi
+
+ucuubaBuritiVar <- c("Ucuuba", "Buriti", "Brijo10")
+
+ucuubaBuritiMod1 <- MixModel(ucuubaBuriti, "PDI", ucuubaBuritiVar, 1)
+
+summary(ucuubaBuritiMod1)
+
+anova(ucuubaBuritiMod1)
+
+ucuubaBuritiMod2 <- MixModel(ucuubaBuriti, "PDI", ucuubaBuritiVar, 2)
+
+summary(ucuubaBuritiMod2)
+
+anova(ucuubaBuritiMod2)
+
+#tucumaUrucumMod3 <- MixModel(tucumaUrucum, "PDI", tucumaUrucumVar, 4)
+
+#summary(cupuacuPequiMod3)
+
+#anova(cupuacuPequiMod3)
+
+anova(ucuubaBuritiMod1, ucuubaBuritiMod2)
+
+#anova(cupuacuPequiMod1, cupuacuPequiMod3)
+
+par(mfrow = c(2, 2))
+
+plot(ucuubaBuritiMod2)
+
+ucuubaBuriti$ponto <- interaction(
+  ucuubaBuriti$Ucuuba,
+  ucuubaBuriti$Buriti,
+  ucuubaBuriti$Brijo10
+)
+
+#modScheffe <- lm(
+#  PDI ~ Murumuru + Acai + Brijo10 +
+#    Murumuru:Acai + Murumuru:Brijo10 + Acai:Brijo10 - 1,
+#  data = murumuruAcai
+#)
+
+modSat <- lm(
+  PDI ~ ponto,
+  data = ucuubaBuriti
+)
+
+
+#Lack of Fit test
+anova(ucuubaBuritiMod2, modSat)
+
+#View(murumuruBuriti)
+```
+
+### Results
+
+The **Quadratic Model** was chosen to fit the data.

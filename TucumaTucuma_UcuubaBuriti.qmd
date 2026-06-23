@@ -1,0 +1,41 @@
+---
+title: "TucumaTucuma and UcuubaBuriti"
+author: "Luís Romera"
+format: html
+editor: visual
+---
+
+In this document, I'm going to recreate the *ternary graphs* for **Tucumã - Tucumã** and **Ucuuba - Buriti**.
+
+## Tucumã-Tucumã
+
+Lets start with **Tucumã-Tucumã**.
+
+```{r}
+#| warning: false
+#| message: false
+
+
+getwd()
+
+tucdata <- read.csv("C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/planilhas/NanoTucumaTucuma.csv")
+
+head(tucdata)
+
+library(mixexp)
+
+tucvar <- c("Tucuma", "Tucuma.1", "Brijo10")
+
+tucmodel <- MixModel(tucdata, "PDI", mixcomps = tucvar, model = 2)
+
+tucplot <- ModelPlot(model = tucmodel,
+                     dimensions = list(x1 = "Tucuma", x2 = "Tucuma.1", x3 = "Brijo10"),
+                     lims = c(0.1665,0.375,0.1665,0.375,0.165, 0.5835),
+                     contour = TRUE,
+                     at = c(0, 0.1, 0.2, 0.4, 1),
+                     pseudo = TRUE,
+                     fill = TRUE,
+                     main = "Tucumã - Tucumã",
+                     axislabs = c("Tucumã", "Tucumã", "Brijo10"),
+                     labels = TRUE)
+```

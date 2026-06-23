@@ -1,0 +1,543 @@
+---
+title: "Lipids Analysis"
+author: "Luís Romera"
+format: html
+editor: visual
+---
+
+In this document, I'm going to analyse the relationship between the lipids used for formulation of nanoparticles.
+
+## PCA of the lipid pairs
+
+First, I'm going to make a principal component analysis of the models coefficients and see what parameter each lipid pair approximates.
+
+```{r}
+coefData <- read.csv("C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/Topicos_em_Nanotecnologia/Tabela de coeficientes NanoIA.csv")
+
+head(coefData)
+
+coefDataPca <- coefData[, c("b1", "b2", "b3", "b12", "b13", "b23")]
+
+rownames(coefDataPca) <- coefData$Combination
+
+coefPca <- prcomp(
+  x = coefDataPca,
+  retx = TRUE,
+  center = TRUE,
+  scale. = TRUE
+)
+
+coefPca
+
+summary(coefPca)
+```
+
+Now, lets try to do some plots,
+
+starting with the scree plot of the explained variance per dimension.
+
+```{r}
+#| warning: False
+#| message: False
+
+library(factoextra)
+
+screePlot <- fviz_eig(coefPca,
+                     # choice = "eigenvalue",
+                      barcolor = "black",
+                      addlabels = TRUE,
+                      ggtheme = theme_minimal(),
+                    #  parallel = TRUE
+                    ) #+ theme_void()
+
+screePlot
+
+ggsave(
+  "pcaCoefVar.png",
+  plot = screePlot,
+  width = 18,
+  height = 14,
+  units = "cm",
+  dpi = 600
+)
+```
+
+First, I'll plot the parameter's vectors
+
+```{r}
+
+PcaVar <- fviz_pca_var(
+  X = coefPca,
+  repel = TRUE,
+  arrowsize = 0.8,
+  col.var = "contrib",
+  gradient.cols = c("#40B5AD", "#FA5F55")
+) +
+  theme(
+    plot.title = element_text(
+      hjust = 0.5,
+      face = "bold",
+      size = 12
+    ),
+    axis.title = element_text(
+      face = "bold",
+      size = 10
+    ),
+    axis.text = element_text(size = 8)
+  ) +
+  labs(
+    title = "PCA of Scheffé model's coefficients"
+  )
+
+
+PcaVar
+
+ggsave(
+  "pcaVar.png",
+  plot = PcaVar,
+  width = 18,
+  height = 14,
+  units = "cm",
+  dpi = 600
+)
+```
+
+Now, I'll plot just the lipid pairs
+
+```{r}
+
+pcaInd <- fviz_pca_ind(
+  X = coefPca,
+  repel = TRUE,
+  col.ind = "#FA5F55",
+  #fill.ind = "contrib",
+  pointsize = 2,
+  arrowsize = 0.8
+) + theme_classic(base_size = 14) +
+  theme(
+    plot.title = element_text(
+      hjust = 0.5,
+      face = "bold",
+      size = 12
+    ),
+    axis.title = element_text(
+      face = "bold",
+      size = 10
+    ),
+    axis.text = element_text(size = 8)
+  ) +
+  labs(
+    title = "PCA of Lipid Pairs"
+  )
+
+pcaInd
+
+ggsave(
+  "pcaInd.png",
+  plot = pcaInd,
+  width = 18,
+  height = 14,
+  units = "cm",
+  dpi = 600
+)
+```
+
+Now I shall plot the bidimensional graph with the parameter's vectors and lipid pair points.
+
+```{r}
+
+pcaPlot <- fviz_pca(
+  X = coefPca,
+  repel = TRUE,
+  col.var = "#40B5AD",
+  col.ind = "#FA5F55",
+  #fill.ind = "contrib",
+  pointsize = 2,
+  arrowsize = 0.8
+) + theme_classic(base_size = 14) +
+  theme(
+    plot.title = element_text(
+      hjust = 0.5,
+      face = "bold",
+      size = 12
+    ),
+    axis.title = element_text(
+      face = "bold",
+      size = 10
+    ),
+    axis.text = element_text(size = 8)
+  ) +
+  labs(
+    title = "PCA of Scheffé model's coefficients"
+  )
+
+pcaPlot
+
+ggsave(
+  "pcaLipidPair.png",
+  plot = pcaPlot,
+  width = 18,
+  height = 14,
+  units = "cm",
+  dpi = 600
+)
+
+
+```
+
+Now, I'll plot the lipid pairs with their nature as butter or oil, to identify some relationship.
+
+```{r}
+coefDataComp <- read.csv("C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/Topicos_em_Nanotecnologia/TabelaCoeficientesNanoIACad.csv")
+
+head(coefDataComp)
+
+pcaType <- fviz_pca_ind(
+  X = coefPca,
+  geom = "point",
+  repel = TRUE,
+  col.ind = "#FA5F55",
+  habillage = coefDataComp$Type,
+  mean.point = FALSE,
+  alpha.ind = 0.7,
+ #addEllipses = TRUE,
+  #fill.ind = "contrib",
+  pointsize = 5,
+  arrowsize = 0.8
+) + theme_classic(base_size = 14) +
+  theme(
+    plot.title = element_text(
+      hjust = 0.5,
+      face = "bold",
+      size = 12
+    ),
+    axis.title = element_text(
+      face = "bold",
+      size = 10
+    ),
+    axis.text = element_text(size = 8)
+  ) +
+  labs(
+    title = "PCA of Lipid Pairs"
+  ) 
+
+pcaType
+
+ggsave(
+  "pcaType.png",
+  plot = pcaType,
+  width = 18,
+  height = 14,
+  units = "cm",
+  dpi = 600
+)
+```
+
+Now I'll plot with the fusion point:
+
+```{r}
+
+#install.packages("ggrepel")
+library(ggrepel)
+
+pcaFP <- fviz_pca_ind(
+  X = coefPca,
+  repel = TRUE,
+  col.ind = "#FA5F55",
+  label = "none",
+  #fill.ind = "contrib",
+  pointsize = 2,
+  arrowsize = 0.8
+) + theme_classic(base_size = 14) +
+  theme(
+    plot.title = element_text(
+      hjust = 0.5,
+      face = "bold",
+      size = 12
+    ),
+    axis.title = element_text(
+      face = "bold",
+      size = 10
+    ),
+    axis.text = element_text(size = 8)
+  ) +
+  labs(
+    title = "PCA of Lipid Pairs by fusion point"
+  )+
+  geom_text_repel(
+    aes(
+      x = coefPca$x[,1],
+      y = coefPca$x[,2],
+      label = coefDataComp$FP
+    )
+  )
+
+pcaFP
+
+ggsave(
+  "pcaFP.png",
+  plot = pcaFP,
+  width = 18,
+  height = 14,
+  units = "cm",
+  dpi = 600
+)
+```
+
+Lets now plot the points with the **percentage of saturated fatty acids**:
+
+```{r}
+pcaSfa <- fviz_pca_ind(
+  X = coefPca,
+  repel = TRUE,
+  col.ind = "#FA5F55",
+  label = "none",
+  #fill.ind = "contrib",
+  pointsize = 2,
+  arrowsize = 0.8
+) + theme_classic(base_size = 14) +
+  theme(
+    plot.title = element_text(
+      hjust = 0.5,
+      face = "bold",
+      size = 12
+    ),
+    axis.title = element_text(
+      face = "bold",
+      size = 10
+    ),
+    axis.text = element_text(size = 8)
+  ) +
+  labs(
+    title = "PCA of Lipid Pairs by percentage of saturated fatty acids"
+  )+
+  geom_text_repel(
+    aes(
+      x = coefPca$x[,1],
+      y = coefPca$x[,2],
+      label = coefDataComp$esfa
+    )
+  )
+
+pcaSfa
+
+ggsave(
+  "pcaSfa.png",
+  plot = pcaSfa,
+  width = 18,
+  height = 14,
+  units = "cm",
+  dpi = 600
+)
+```
+
+Now, I'll plot with the percentage of unsaturated fatty acids.
+
+```{r}
+
+pcaUfa <- fviz_pca_ind(
+  X = coefPca,
+  repel = TRUE,
+  col.ind = "#FA5F55",
+  label = "none",
+  #fill.ind = "contrib",
+  pointsize = 2,
+  arrowsize = 0.8
+) + theme_classic(base_size = 14) +
+  theme(
+    plot.title = element_text(
+      hjust = 0.5,
+      face = "bold",
+      size = 12
+    ),
+    axis.title = element_text(
+      face = "bold",
+      size = 10
+    ),
+    axis.text = element_text(size = 8)
+  ) +
+  labs(
+    title = "PCA of Lipid Pairs by percentage of unsaturated fatty acids"
+  )+
+  geom_text_repel(
+    aes(
+      x = coefPca$x[,1],
+      y = coefPca$x[,2],
+      label = coefDataComp$eufa
+    )
+  )
+
+pcaUfa
+
+ggsave(
+  "pcaUfa.png",
+  plot = pcaUfa,
+  width = 18,
+  height = 14,
+  units = "cm",
+  dpi = 600
+)
+```
+
+Now, I'll plot the points with the label of **major fatty acid per lipid**:
+
+```{r}
+
+pcaFA <- fviz_pca_ind(
+  X = coefPca,
+  geom = "point",
+  pointshape = 16,
+  repel = TRUE,
+  col.ind = "#FA5F55",
+  habillage = coefDataComp$FA,
+  mean.point = FALSE,
+  alpha.ind = 0.7,
+  #addEllipses = TRUE,
+  #fill.ind = "contrib",
+  pointsize = 5,
+  arrowsize = 0.8
+) + theme_classic(base_size = 14) +
+  theme(
+    plot.title = element_text(
+      hjust = 0.5,
+      face = "bold",
+      size = 12
+    ),
+    axis.title = element_text(
+      face = "bold",
+      size = 10
+    ),
+    axis.text = element_text(size = 8)
+  ) +
+  labs(
+    title = "PCA of Lipid Pairs by major fatty acid",
+    color = "Major fatty acids"
+  ) 
+
+pcaFA
+
+ggsave(
+  "pcaFA.png",
+  plot = pcaFA,
+  width = 18,
+  height = 14,
+  units = "cm",
+  dpi = 600
+)
+```
+
+Now, I'll try to use *clustering* methods to separate the lipid pairs into **clusters** and try to extract some data.
+
+```{r}
+#| message: FALSE
+
+distPair <- dist(coefDataPca)
+distPair
+
+coefHc <- hclust(
+  distPair,
+  method = "ward.D2"
+)
+
+coefHc
+
+plot(coefHc)
+
+pairTree <- cutree(
+  coefHc,
+  k=3
+)
+
+pairTree
+
+pairClut <- fviz_pca_ind(
+  X = coefPca,
+  geom = "point",
+  habillage = factor(pairTree),
+  addEllipses = TRUE,
+  mean.point = FALSE,
+  pointsize = 5,
+  alpha.ind = 0.5
+  #title = "Lipid Pairs by cluster"
+) + theme_classic(base_size = 14) +
+  theme(
+    plot.title = element_text(
+      hjust = 0.5,
+      face = "bold",
+      size = 12
+    ),
+    axis.title = element_text(
+      face = "bold",
+      size = 10
+    ),
+    axis.text = element_text(size = 8)
+  ) +
+  labs(
+    title = "Lipid Pairs by Cluster"
+  ) 
+
+pairClut
+
+ggsave(
+  "pairClut.png",
+  plot = pairClut,
+  width = 18,
+  height = 14,
+  units = "cm",
+  dpi = 600
+)
+
+head(coefDataPca)
+
+fviz_dist(
+  distPair
+)
+
+coefEhc <- eclust(
+  x = coefDataPca,
+  FUNcluster = "hclust",
+  K = 3,
+  k.max = 3
+)
+
+fviz_cluster(
+  coefEhc,
+  geom = "point",
+  repel = TRUE)
+
+fviz_dend(
+  x = coefEhc,
+  lwd = 
+)
+
+library(ggdendro)
+library(ggplot2)
+
+coefDend <- dendro_data(coefEhc)
+
+ggplot(
+  segment(coefDend)
+) +
+  geom_segment(
+    aes(
+      x = x,
+      y = y,
+      xend = xend,
+      yend = yend
+    )
+  ) #+
+  #theme_classic()
+
+#dendPlot
+
+library(dendextend)
+
+coefDend <- as.dendrogram(coefHc)
+
+coefDend <- color_branches(
+  coefDend,
+  k = 3
+)
+
+plot(coefDend)
+```

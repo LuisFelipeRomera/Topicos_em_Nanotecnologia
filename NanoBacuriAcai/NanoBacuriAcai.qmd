@@ -1,0 +1,147 @@
+---
+title: "Nano Bacuri Açaí"
+author: "Luís Romera"
+format: html
+editor: visual
+---
+
+------------------------------------------------------------------------
+
+In this document I'll be analyzing the interaction between **Bacuri, Açai and Brij O10** in the formulation of **nanoparticles**.
+
+So first I'll import the data:
+
+```{r}
+
+setwd(
+  "C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/Topicos_em_Nanotecnologia/NanoBacuriAcai"
+  )
+
+data <- read.csv(
+  "NanoBacuriAcai.csv"
+  )
+
+head(
+  data
+  )
+
+View(
+  data
+)
+```
+
+Now, I'll adjust a model for the **PDI**:
+
+```{r}
+#| message: false
+#| warning: false
+library(
+  mixexp
+)
+
+mixvars <- c("Bacuri", "Acai", "Brijo10")
+
+lin <- MixModel(
+  data,
+  "PDI",
+  mixcomps = mixvars,
+  1
+)
+
+```
+
+Let's begin the model diagnostic:
+
+```{r}
+summary(lin)
+
+anova(lin)
+```
+
+Let's now adjust a quadratic model
+
+```{r}
+quad <- MixModel(
+  data,
+  "PDI",
+  mixcomps = mixvars,
+  2
+)
+
+anova(quad)
+```
+
+Let's compare the two models:
+
+```{r}
+anova(lin, quad)
+```
+
+Lets plot the response graph:
+
+```{r}
+ModelPlot(
+  model = lin,
+  dimensions = list(x1 = "Bacuri", x2 = "Acai", x3 = "Brijo10"),
+  lims = c(0.1650, 0.5, 0.1665, 0.5, 0.16650, 0.5835),
+  pseudo = TRUE,
+  at = c(0, 0.2, 0.4, 0.6, 0.8, 1),
+  contour = TRUE,
+  fill = TRUE,
+  main = "PDI Nano Bacuri Açaí",
+  axislabs = c("Bacuri", "Açaí", "Brij O10"),
+  axislab.offset = 0.1,
+  cornerlabs = c("", "", ""),
+  grid = TRUE,
+  labels = TRUE,
+)
+```
+
+## Conclusion for PDI
+
+The linear model significantly shapes the response of our data. We saw that the quadratic model doesn't differ significantly from the linear model. So we may hypothesize, based on our data, that the relation between the components is linear. Also, Bacuri was the only parameter that significantly shapes the response.
+
+------------------------------------------------------------------------
+
+Now, lets adjust the data for the size:
+
+```{r}
+linsize <- MixModel(
+  data,
+  "Size",
+  mixcomps = mixvars,
+  1
+)
+
+```
+
+```{r}
+summary(linsize)
+```
+
+```{r}
+anova(linsize)
+```
+
+Now let's compare with a **quadratic model**:
+
+```{r}
+quadsize <- MixModel(
+  data,
+  "Size",
+  mixcomps = mixvars,
+  2
+)
+```
+
+```{r}
+anova(linsize, quadsize)
+```
+
+```{r}
+anova(quadsize)
+```
+
+```{r}
+summary(quadsize)
+```

@@ -1,0 +1,78 @@
+---
+title: "Nano Bacuri Pracaxi"
+author: "Luís Romera"
+format: html
+editor: visual
+---
+
+------------------------------------------------------------------------
+
+In this document I'll be analyzing the interaction between **Bacuri, Pracaxi and Brij O10** in the formulation of **nanoparticles**.
+
+So first I'll import the data:
+
+```{r}
+
+setwd(
+  "C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/Topicos_em_Nanotecnologia/NanoBacuriPracaxi"
+  )
+
+data <- read.csv(
+  "NanoBacuriPracaxi.csv"
+  )
+
+head(data)
+
+View(data)
+```
+
+Now, I'll adjust a model:
+
+```{r}
+#| message: false
+#| warning: false
+library(
+  mixexp
+)
+
+mixvars <- c("Bacuri", "Pracaxi", "Brijo10")
+
+lin <- MixModel(
+  data,
+  "PDI",
+  mixcomps = mixvars,
+  1
+)
+
+```
+
+Let's begin the model diagnostic:
+
+```{r}
+summary(lin)
+
+anova(lin)
+```
+
+Let's now adjust a quadratic model
+
+```{r}
+quad <- MixModel(
+  data,
+  "PDI",
+  mixcomps = mixvars,
+  2
+)
+
+anova(quad)
+```
+
+Let's compare the two models:
+
+```{r}
+anova(lin, quad)
+```
+
+## Conclusion
+
+We saw that the quadratic model doesn't differ significantly from the linear model. So we may hypothesize, based on our data, that the relation between the components is linear. Also, Bacuri was the only parameter that significantly shapes the response.

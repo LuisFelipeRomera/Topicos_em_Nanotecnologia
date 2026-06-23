@@ -1,0 +1,428 @@
+---
+title: "Lipids isolated effects on coefficients"
+author: "Luís Romera"
+format: html
+editor: visual
+---
+
+```{r}
+getwd()
+```
+
+In this document, I'm going to calculate the mean of the coefficients of each lipid used in the nanostructure formulations.
+
+## Lipids:
+
+- **Bacuri**
+
+- **Açaí**
+
+- **Pracaxi**
+
+- **Cacau**
+
+- **Tucumã**
+
+- **Cupuaçu**
+
+- **Pequi**
+
+- **Manga**
+
+- **Andiroba**
+
+- **Murumuru**
+
+- **Buriti**
+
+- **Jambu**
+
+- **Urucum**
+
+- **Ucuuba**
+
+I'm going to apply multiple linear regression to determine how each lipid dictates the **Scheffé's coefficients**.
+
+```{r}
+coefData <- read.csv("Tabela de coeficientes NanoIA.csv")
+```
+
+Let's fit the linear models
+
+## B1
+
+```{r}
+B1 <- lm(
+  b1 ~
+    Bacuri +
+    Açaí +
+    Pracaxi +
+    Cacau +
+    Tucumã +
+    Cupuaçu +
+    Pequi +
+    Manga +
+    Andiroba +
+    Murumuru +
+    Buriti +
+    Jambu +
+    Urucum +
+    Ucuuba,
+  data = coefData
+)
+
+B1
+
+summary(B1)
+
+anova(B1)
+```
+
+## B2
+
+```{r}
+
+lm(
+  b2 ~
+    Bacuri +
+    Açaí +
+    Pracaxi +
+    Cacau +
+    Tucumã +
+    Cupuaçu +
+    Pequi +
+    Manga +
+    Andiroba +
+    Murumuru +
+    Buriti +
+    Jambu +
+    Urucum +
+    Ucuuba,
+  data = coefData
+)
+```
+
+## B3
+
+```{r}
+lm(
+  b3 ~
+    Bacuri +
+    Açaí +
+    Pracaxi +
+    Cacau +
+    Tucumã +
+    Cupuaçu +
+    Pequi +
+    Manga +
+    Andiroba +
+    Murumuru +
+    Buriti +
+    Jambu +
+    Urucum +
+    Ucuuba,
+  data = coefData
+)
+```
+
+## B12
+
+```{r}
+B12 <- lm(
+  b12 ~
+    Bacuri +
+    Açaí +
+    Pracaxi +
+    Cacau +
+    Tucumã +
+    Cupuaçu +
+    Pequi +
+    Manga +
+    Andiroba +
+    Murumuru +
+    Buriti +
+    Jambu +
+    Urucum +
+    Ucuuba,
+  data = coefData
+)
+
+B12
+
+summary(B12)
+```
+
+## B13
+
+```{r}
+
+lm(
+  b13~
+    Bacuri +
+    Açaí +
+    Pracaxi +
+    Cacau +
+    Tucumã +
+    Cupuaçu +
+    Pequi +
+    Manga +
+    Andiroba +
+    Murumuru +
+    Buriti +
+    Jambu +
+    Urucum +
+    Ucuuba,
+  data = coefData
+)
+```
+
+## B23
+
+```{r}
+
+lm(
+  b23~
+    Bacuri +
+    Açaí +
+    Pracaxi +
+    Cacau +
+    Tucumã +
+    Cupuaçu +
+    Pequi +
+    Manga +
+    Andiroba +
+    Murumuru +
+    Buriti +
+    Jambu +
+    Urucum +
+    Ucuuba,
+  data = coefData
+)
+```
+
+Now, I'm going to apply PCA to the lipids alone.
+
+```{r}
+
+getwd()
+
+coefSing <- read.csv("coeficientesSingular.csv")
+
+coefSing <- coefSing[rowSums(is.na(coefSing)) < ncol(coefSing), ]
+
+coefSing <- coefSing[, colSums(is.na(coefSing)) < nrow(coefSing)]
+
+coefSing <- coefSing[!is.na(coefSing$Lipid), ]
+
+coefSing <- coefSing[coefSing$Lipid != "", ]
+
+nrow(coefSing)
+
+str(coefSing)
+
+head(coefSing)
+
+pcaData <- coefSing[, c(
+"b1",
+"b2",
+"b3",
+"b12",
+"b13",
+"b23"
+)]
+
+rownames(pcaData) <- coefSing$Lipid
+
+View(coefSing)
+
+pca <- prcomp(
+  pcaData,
+  retx = TRUE,
+  center = TRUE,
+  scale. = TRUE
+)
+pca
+
+summary(pca)
+
+library(factoextra)
+
+pcaEigLip <- fviz_eig(pca)
+pcaEigLip
+
+ggsave(
+  "pcaEigLip.png",
+  plot = pcaEigLip,
+  width = 18,
+  height = 14,
+  units = "cm",
+  dpi = 300
+)
+
+pcaBiplot <- fviz_pca_biplot(
+  pca,
+  repel = TRUE,
+  pointsize = 2
+)
+pcaBiplot
+
+ggsave(
+  "pcaBiplot.png",
+  plot = pcaBiplot,
+  width = 18,
+  height = 14,
+  units = "cm",
+  dpi = 300
+)
+
+pcaVar <- fviz_pca_var(
+  pca,
+  col.var = "contrib",
+  repel = TRUE,
+  gradient.cols = c("blue", "orange", "red")
+)
+pcaVar
+
+ggsave(
+  "pcaVar.png",
+  plot = pcaVar,
+  width = 18,
+  height = 14,
+  units = "cm",
+  dpi = 300
+)
+
+round(pca$rotation, 3)
+```
+
+## Clustering
+
+```{r}
+
+distMat <- dist(scale(pcaData))
+
+hc <- hclust(
+  distMat,
+  method = "ward.D2"
+)
+
+hc
+
+cluster <- cutree(
+  hc,
+  k = 2
+)
+cluster
+
+pcaHcLipid <- fviz_pca_ind(
+  pca,
+  geom = "point",
+  habillage = factor(cluster),
+  addEllipses = TRUE,
+  ellipse.level = 0.95,
+  pointsize = 4,
+  repel = TRUE
+) +
+  theme_classic()
+
+pcaHcLipid
+
+ggsave(
+  "pcaHcLipid.png",
+  plot = pcaHcLipid,
+  width = 18,
+  height = 14,
+  units = "cm",
+  dpi = 300
+)
+
+pcaComp <- fviz_pca_biplot(
+  pca,
+  habillage = factor(cluster),
+  addEllipses = TRUE,
+  ellipse.level = 0.95,
+  pointsize = 4,
+  repel = TRUE
+) 
+
+#pcaComp
+
+pcaCluster <- fviz_cluster(
+  list(
+    data = scale(pcaData),
+    cluster = cluster
+  )
+)
+
+pcaCluster
+
+ggsave(
+  "pcaCluster.png",
+  plot = pcaCluster,
+  width = 18,
+  height = 14,
+  units = "cm",
+  dpi = 300
+)
+```
+
+## Dendrogram
+
+```{r}
+
+#library(factoextra)
+library(dendextend)
+
+dend <- as.dendrogram(hc)
+
+dend <- color_branches(
+  dend,
+  k = 3
+)
+
+plot(dend)
+
+class(dend)
+
+#png(
+ # "dend.png",
+ # width = 18,
+#  height = 14,
+ # units = "cm",
+#  res = 300
+#)
+
+plot(
+  dend,
+  main = "Cluster Dendrogram",
+  xlab = "",
+  sub = "",
+  cex = 1.2
+)
+
+dev.list()
+
+dev.off()
+```
+
+## Heatmap
+
+```{r}
+
+library(pheatmap)
+
+pcaDataScale <- scale(pcaData)
+
+heatMap <- pheatmap(
+  pcaDataScale,
+  clustering_method = "ward.D2",
+  border_color = NA,
+  fontsize_row = 12,
+  fontsize_col = 12,
+  main = "Lipid clustering by Scheffé's Coefficients"
+)
+
+class(heatMap)
+
+heatMap
+```
