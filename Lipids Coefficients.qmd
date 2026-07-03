@@ -204,6 +204,9 @@ Now, I'm going to apply PCA to the lipids alone.
 
 ```{r}
 
+#| warning: False
+#| message: FALSE
+
 getwd()
 
 coefSing <- read.csv("coeficientesSingular.csv")
@@ -247,7 +250,12 @@ summary(pca)
 
 library(factoextra)
 
-pcaEigLip <- fviz_eig(pca)
+pcaEigLip <- fviz_eig(pca,
+                      barcolor = "black",
+                      addlabels = TRUE,
+                      ggtheme = theme_minimal(),
+                      #  parallel = TRUE 
+                      )
 pcaEigLip
 
 ggsave(
@@ -259,11 +267,62 @@ ggsave(
   dpi = 300
 )
 
-pcaBiplot <- fviz_pca_biplot(
-  pca,
+pcaLip <- fviz_pca_ind(
+  X = pca,
   repel = TRUE,
   pointsize = 2
+) + theme_classic(base_size = 14) +
+  theme(
+    plot.title = element_text(
+      hjust = 0.5,
+      face = "bold",
+      size = 12
+    ),
+    axis.title = element_text(
+      face = "bold",
+      size = 10
+    ),
+    axis.text = element_text(size = 8)
+  ) +
+  labs(
+    title = "PCA of lipids"
+  )
+
+pcaLip
+
+ggsave(
+  "pcaLip.png",
+  plot = pcaLip,
+  width = 18,
+  height = 14,
+  units = "cm",
+  dpi = 300
 )
+
+pcaBiplot <- fviz_pca(
+  X = pca,
+  repel = TRUE,
+  #col.var = "#40B5AD",
+  #col.ind = "#FA5F55",
+  #fill.ind = "contrib",
+  pointsize = 2,
+  arrowsize = 0.8
+) + theme_classic(base_size = 14) +
+  theme(
+    plot.title = element_text(
+      hjust = 0.5,
+      face = "bold",
+      size = 12
+    ),
+    axis.title = element_text(
+      face = "bold",
+      size = 10
+    ),
+    axis.text = element_text(size = 8)
+  ) +
+  labs(
+    title = "PCA of coefficients and lipids"
+  )
 pcaBiplot
 
 ggsave(
@@ -276,11 +335,27 @@ ggsave(
 )
 
 pcaVar <- fviz_pca_var(
-  pca,
-  col.var = "contrib",
-  repel = TRUE,
-  gradient.cols = c("blue", "orange", "red")
-)
+  X = pca,
+repel = TRUE,
+arrowsize = 0.8,
+col.var = "contrib",
+gradient.cols = c("#40B5AD", "#FA5F55")
+) +
+    theme(
+      plot.title = element_text(
+        hjust = 0.5,
+        face = "bold",
+        size = 12
+      ),
+      axis.title = element_text(
+        face = "bold",
+        size = 10
+      ),
+      axis.text = element_text(size = 8)
+    ) +
+    labs(
+      title = "PCA of coefficients"
+    )
 pcaVar
 
 ggsave(
@@ -310,7 +385,7 @@ hc
 
 cluster <- cutree(
   hc,
-  k = 2
+  k = 3
 )
 cluster
 
@@ -318,7 +393,10 @@ pcaHcLipid <- fviz_pca_ind(
   pca,
   geom = "point",
   habillage = factor(cluster),
-  addEllipses = TRUE,
+  pointshape = 16,
+  #addEllipses = TRUE,
+  fill.ind = "black",
+  mean.point = FALSE,
   ellipse.level = 0.95,
   pointsize = 4,
   repel = TRUE
@@ -347,18 +425,275 @@ pcaComp <- fviz_pca_biplot(
 
 #pcaComp
 
-pcaCluster <- fviz_cluster(
-  list(
-    data = scale(pcaData),
-    cluster = cluster
-  )
+#searching the optimal number of clusters
+
+fviz_nbclust(
+  scale(pcaData),
+  FUNcluster = hcut,
+  method = "silhouette",
+  k.max = 10,
+  print.summary = FALSE
 )
+
+pcaEclust <- eclust(
+  x = scale(pcaData),
+  FUNcluster = "hclust",
+  k = 4,
+  k.max = 10
+  #graph = TRUE
+)
+
+pcaEclust
+
+summary(pcaEclust)
+
+cutree(
+  pcaEclust,
+  k = 5
+)
+
+pcaCluster <- fviz_cluster(
+    pcaEclust,
+    #repel = TRUE,
+    show.clust.cent = FALSE,
+    pointsize = 4,
+    palette = c("#FA6F55", "#339E2C", "#CCC941", "#418DBA"),
+  ) + theme_classic() +
+  theme(
+    plot.title = element_text(
+      hjust = 0.5,
+      face = "bold",
+      size = 12
+    ),
+    axis.title = element_text(
+      face = "bold",
+      size = 10
+    ),
+    axis.text = element_text(size = 8)
+  ) +
+  labs(
+    title = "Cluster Plot of Lipids"
+  )
 
 pcaCluster
 
 ggsave(
   "pcaCluster.png",
   plot = pcaCluster,
+  width = 18,
+  height = 14,
+  units = "cm",
+  dpi = 300
+)
+
+identical(
+  pcaEclust$cluster,
+  cutree(pcaEclust,k=3)
+)
+
+hc <- hclust(
+  dist(
+    scale(pcaData)
+    ),
+  method = "ward.D2"
+)
+
+cluster1 <- cutree(
+  hc,
+  k = 3
+)
+
+cluster2 <- pcaEclust$cluster
+
+all(cluster1 == cluster2)
+
+cluster2
+```
+
+Now, I'll try to plot with the physical state label
+
+```{r}
+
+lipidComp <- read.csv("C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/Topicos_em_Nanotecnologia/coeficientesSingularComp.csv")
+
+
+library(ggrepel)
+
+  pcaClusterType <- fviz_cluster(
+    pcaEclust,
+    geom = "point",
+    show.clust.cent = FALSE,
+    pointsize = 4,
+    palette = c("#FA6F55", "#339E2C", "#CCC941", "#418DBA"),
+    
+  ) +
+    theme_classic() +
+    geom_text_repel(
+      aes(
+        label = lipidComp$type
+      ),
+      size = 4
+    ) + 
+    theme(
+      plot.title = element_text(
+        hjust = 0.5,
+        face = "bold",
+        size = 12
+      ),
+      axis.title = element_text(
+        face = "bold",
+        size = 10
+      ),
+      axis.text = element_text(size = 8)
+    ) +
+    labs(
+      title = "Cluster Plot with Physical state"
+    )
+  
+  pcaClusterType
+
+
+  ggsave(
+    "pcaClusterType.png",
+    plot = pcaClusterType,
+    width = 18,
+    height = 14,
+    units = "cm",
+    dpi = 300
+  )
+```
+
+Now I'll plot **fusion point**
+
+```{r}
+
+pcaClusterFP <- fviz_cluster(
+  pcaEclust,
+  geom = "point",
+  show.clust.cent = FALSE,
+  pointsize = 4,
+  palette = c("#FA6F55", "#339E2C", "#CCC941", "#418DBA"),
+) +
+  theme_classic() +
+  geom_text_repel(
+    aes(
+      label = lipidComp$FP
+    )
+  ) +
+  theme(
+    plot.title = element_text(
+      hjust = 0.5,
+      face = "bold",
+      size = 12
+    ),
+    axis.title = element_text(
+      face = "bold",
+      size = 10
+    ),
+    axis.text = element_text(size = 8)
+  ) +
+  labs(
+    title = "Cluster Plot with Fusion Point"
+  )
+
+pcaClusterFP
+
+
+ggsave(
+  "pcaClusterFP.png",
+  plot = pcaClusterFP,
+  width = 18,
+  height = 14,
+  units = "cm",
+  dpi = 300
+)
+```
+
+Now, I'll plot with the **percentage of unsatyrated fatty acids**
+
+```{r}
+
+pcaClusterUFA <- fviz_cluster(
+  pcaEclust,
+  geom = "point",
+  show.clust.cent = FALSE,
+  pointsize = 4,
+  palette = c("#FA6F55", "#339E2C", "#CCC941", "#418DBA"),
+) +
+  theme_classic() +
+  geom_text_repel(
+    aes(
+      label = lipidComp$UFA
+    )
+  ) +
+  theme(
+    plot.title = element_text(
+      hjust = 0.5,
+      face = "bold",
+      size = 12
+    ),
+    axis.title = element_text(
+      face = "bold",
+      size = 10
+    ),
+    axis.text = element_text(size = 8)
+  ) +
+  labs(
+    title = "Cluster Plot with Percentage of Unsaturated Fatty Acids"
+  )
+
+pcaClusterUFA
+
+
+ggsave(
+  "pcaClusterUFA.png",
+  plot = pcaClusterUFA,
+  width = 18,
+  height = 14,
+  units = "cm",
+  dpi = 300
+)
+```
+
+Now with **major fatty acid chain**
+
+```{r}
+
+pcaClusterFA <- fviz_cluster(
+  pcaEclust,
+  geom = "point",
+  show.clust.cent = FALSE,
+  pointsize = 4,
+  palette = c("#FA6F55", "#339E2C", "#CCC941", "#418DBA"),
+) +
+  theme_classic() +
+  geom_text_repel(
+    aes(
+      label = lipidComp$FA
+    )
+  ) +
+  theme(
+    plot.title = element_text(
+      hjust = 0.5,
+      face = "bold",
+      size = 12
+    ),
+    axis.title = element_text(
+      face = "bold",
+      size = 10
+    ),
+    axis.text = element_text(size = 8)
+  ) +
+  labs(
+    title = "Cluster Plot with major Fatty Acid chain"
+  )
+
+pcaClusterFA
+
+
+ggsave(
+  "pcaClusterFA.png",
+  plot = pcaClusterFA,
   width = 18,
   height = 14,
   units = "cm",
@@ -377,13 +712,23 @@ dend <- as.dendrogram(hc)
 
 dend <- color_branches(
   dend,
-  k = 3
+  k = 4
 )
+
+dev.new()
 
 plot(dend)
 
+abline(
+  h = 4,
+  col = "black",
+  lwd = 2,
+  lty = 2
+)
+
 class(dend)
 
+dev.cur()
 #png(
  # "dend.png",
  # width = 18,

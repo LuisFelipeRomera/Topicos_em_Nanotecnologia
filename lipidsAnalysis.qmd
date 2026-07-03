@@ -105,6 +105,38 @@ ggsave(
 Now, I'll plot just the lipid pairs
 
 ```{r}
+cluster <- c(
+  "Cupuaçu-Cacau",
+  "Bacuri-Pracaxi",
+  "Cacau-Tucumã",
+  "Cupuaçu-Tucumã",
+  "Cupuaçu-Açaí",
+  "Tucumã-Urucum",
+  "Manga-Andiroba",
+  "Murumuru-Jambu",
+  "Manga-Pracaxi",
+  "Murumuru-Cupuaçu",
+  "Ucuuba-Andiroba"
+)
+
+coord <- as.data.frame(coefPca$x)
+
+head(coefPca)
+
+coord$lipid <- rownames(coord)
+
+coord$group <- coord$lipid %in% cluster
+
+groupCoord <- subset(coord, group)
+
+hull <- groupCoord[
+  chull(
+    groupCoord$PC1,
+    groupCoord$PC2
+  ),
+]
+
+
 
 pcaInd <- fviz_pca_ind(
   X = coefPca,
@@ -128,8 +160,26 @@ pcaInd <- fviz_pca_ind(
   ) +
   labs(
     title = "PCA of Lipid Pairs"
+  ) + geom_polygon(
+    data = hull,
+    aes(
+      x = PC1,
+      y = PC2
+    ),
+    inherit.aes = FALSE,
+    fill = NA,
+    color = "#40B5AD",
+    linewidth = 0.7
   )
-
+ # stat_ellipse(
+  #  data = subset(coord, group),
+   # aes(
+    #  x = PC1,
+    #  y = PC2
+   # ),
+   # linewidth = 1
+ # )
+  
 pcaInd
 
 ggsave(
@@ -185,6 +235,50 @@ ggsave(
 
 ```
 
+Now I'll plot the lipid pairs with their **Scheffé equation's degree fitted**.
+
+```{r}
+pcaModel <- fviz_pca_ind(
+  X = coefPca,
+  geom = "point",
+  repel = TRUE,
+  col.ind = "#FA5F55",
+  habillage = coefData$Model,
+  mean.point = FALSE,
+  alpha.ind = 0.7,
+  #addEllipses = TRUE,
+  #fill.ind = "contrib",
+  pointsize = 5,
+  arrowsize = 0.8
+) + theme_classic(base_size = 14) +
+  theme(
+    plot.title = element_text(
+      hjust = 0.5,
+      face = "bold",
+      size = 12
+    ),
+    axis.title = element_text(
+      face = "bold",
+      size = 10
+    ),
+    axis.text = element_text(size = 8)
+  ) +
+  labs(
+    title = "PCA of Lipid Pairs by Degree of Scheffé's Equation"
+  ) 
+
+pcaModel
+
+ggsave(
+  "pcaModel.png",
+  plot = pcaModel,
+  width = 18,
+  height = 14,
+  units = "cm",
+  dpi = 600
+)
+```
+
 Now, I'll plot the lipid pairs with their nature as butter or oil, to identify some relationship.
 
 ```{r}
@@ -218,7 +312,7 @@ pcaType <- fviz_pca_ind(
     axis.text = element_text(size = 8)
   ) +
   labs(
-    title = "PCA of Lipid Pairs"
+    title = "PCA of Lipid Pairs by Physic State"
   ) 
 
 pcaType
@@ -284,6 +378,58 @@ ggsave(
 )
 ```
 
+now, I'll plot the **difference of fusion points**.
+
+```{r}
+
+pcaDeltaFP <- fviz_pca_ind(
+  X = coefPca,
+  repel = TRUE,
+  col.ind = "#FA5F55",
+  label = "none",
+  #fill.ind = "contrib",
+  pointsize = 2,
+  arrowsize = 0.8
+) + theme_classic(base_size = 14) +
+  theme(
+    plot.title = element_text(
+      hjust = 0.5,
+      face = "bold",
+      size = 12
+    ),
+    axis.title = element_text(
+      face = "bold",
+      size = 10
+    ),
+    axis.text = element_text(size = 8)
+  ) +
+  labs(
+    title = expression(
+      bold(
+        "PCA of Lipid Pairs by"~Delta~"Fusion Point"
+        )
+    )
+  )+
+  geom_text_repel(
+    aes(
+      x = coefPca$x[,1],
+      y = coefPca$x[,2],
+      label = coefDataComp$deltaFP
+    )
+  )
+
+pcaDeltaFP
+
+ggsave(
+  "pcaDeltaFP.png",
+  plot = pcaDeltaFP,
+  width = 18,
+  height = 14,
+  units = "cm",
+  dpi = 600
+)
+```
+
 Lets now plot the points with the **percentage of saturated fatty acids**:
 
 ```{r}
@@ -331,7 +477,7 @@ ggsave(
 )
 ```
 
-Now, I'll plot with the percentage of unsaturated fatty acids.
+Now, I'll plot with the percentage of **unsaturated fatty acids**.
 
 ```{r}
 
@@ -372,6 +518,93 @@ pcaUfa
 ggsave(
   "pcaUfa.png",
   plot = pcaUfa,
+  width = 18,
+  height = 14,
+  units = "cm",
+  dpi = 600
+)
+```
+
+Plotting now the **difference of the percentage of saturated fatty acids**.
+
+```{r}
+
+clusterSfa <- c(
+  "Ucuuba-Buriti",
+  "Murumuru-Buriti",
+  "Murumuru-Açaí"
+)
+
+coordSfa <- as.data.frame(coefPca$x)
+
+head(coefPca)
+
+coordSfa$lipid <- rownames(coordSfa)
+
+coordSfa$group <- coordSfa$lipid %in% clusterSfa
+
+groupCoordSfa <- subset(coordSfa, group)
+
+hullSfa <- groupCoordSfa[
+  chull(
+    groupCoordSfa$PC1,
+    groupCoordSfa$PC2
+  ),
+]
+
+
+
+pcaDeltaSfa <- fviz_pca_ind(
+  X = coefPca,
+  repel = TRUE,
+  col.ind = "#FA5F55",
+  label = "none",
+  #fill.ind = "contrib",
+  pointsize = 2,
+  arrowsize = 0.8
+) + theme_classic(base_size = 14) +
+  theme(
+    plot.title = element_text(
+      hjust = 0.5,
+      face = "bold",
+      size = 12
+    ),
+    axis.title = element_text(
+      face = "bold",
+      size = 10
+    ),
+    axis.text = element_text(size = 8)
+  ) +
+  labs(
+    title = expression(
+      bold(
+        "PCA of Lipid Pairs by"~Delta~"Percentage of Saturated Fatty Acids"
+      )
+    )
+  )+
+  geom_text_repel(
+    aes(
+      x = coefPca$x[,1],
+      y = coefPca$x[,2],
+      label = coefDataComp$deltaSfa
+    )
+  ) + geom_polygon(
+    data = hullSfa,
+    aes(
+      x = PC1,
+      y = PC2
+    ),
+    inherit.aes = FALSE,
+    fill = NA,
+    color = "#40B5AD",
+    linewidth = 1.3
+  )
+
+pcaDeltaSfa
+
+ggsave(
+  "pcaDeltaSfa.png",
+  plot = pcaDeltaSfa,
   width = 18,
   height = 14,
   units = "cm",
@@ -431,8 +664,17 @@ Now, I'll try to use *clustering* methods to separate the lipid pairs into **clu
 ```{r}
 #| message: FALSE
 
-distPair <- dist(coefDataPca)
+distPair <- dist(
+  scale(coefDataPca)
+)
 distPair
+
+fviz_dist(
+  distPair,
+  gradient = list(low = "blue",
+                  mid = "white",
+                  high = "red")
+  )
 
 coefHc <- hclust(
   distPair,
@@ -474,6 +716,7 @@ pairClut <- fviz_pca_ind(
   ) +
   labs(
     title = "Lipid Pairs by Cluster"
+    #color = "Clusters"
   ) 
 
 pairClut
@@ -539,5 +782,21 @@ coefDend <- color_branches(
   k = 3
 )
 
-plot(coefDend)
+png(
+  "cluster.png",
+  width = 18,
+  height = 14,
+  units = "cm",
+  res = 600
+)
+
+plot(
+  coefDend,
+  main = "Cluster Dendrogram",
+  xlab = "",
+  sub = "",
+  cex = 1.2
+)
+
+dev.off()
 ```
