@@ -1,7 +1,7 @@
 ---
 title: "Lipids isolated effects on coefficients"
 author: "Luís Romera"
-format: html
+format: pdf
 editor: visual
 ---
 
@@ -52,6 +52,11 @@ Let's fit the linear models
 ## B1
 
 ```{r}
+
+#| dev: png
+
+library(magick)
+
 B1 <- lm(
   b1 ~
     Bacuri +
@@ -81,6 +86,8 @@ anova(B1)
 ## B2
 
 ```{r}
+#| dev: png
+
 
 lm(
   b2 ~
@@ -105,6 +112,8 @@ lm(
 ## B3
 
 ```{r}
+#| dev: png
+
 lm(
   b3 ~
     Bacuri +
@@ -128,6 +137,8 @@ lm(
 ## B12
 
 ```{r}
+#| dev: png
+
 B12 <- lm(
   b12 ~
     Bacuri +
@@ -155,6 +166,7 @@ summary(B12)
 ## B13
 
 ```{r}
+#| dev: png
 
 lm(
   b13~
@@ -179,6 +191,7 @@ lm(
 ## B23
 
 ```{r}
+#| dev: png
 
 lm(
   b23~
@@ -203,6 +216,7 @@ lm(
 Now, I'm going to apply PCA to the lipids alone.
 
 ```{r}
+#| dev: png
 
 #| warning: False
 #| message: FALSE
@@ -359,7 +373,7 @@ gradient.cols = c("#40B5AD", "#FA5F55")
 pcaVar
 
 ggsave(
-  "pcaVar.png",
+  "pcaVarLip.png",
   plot = pcaVar,
   width = 18,
   height = 14,
@@ -373,6 +387,7 @@ round(pca$rotation, 3)
 ## Clustering
 
 ```{r}
+#| dev: png
 
 distMat <- dist(scale(pcaData))
 
@@ -513,6 +528,7 @@ cluster2
 Now, I'll try to plot with the physical state label
 
 ```{r}
+#| dev: png
 
 lipidComp <- read.csv("C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/Topicos_em_Nanotecnologia/coeficientesSingularComp.csv")
 
@@ -566,6 +582,7 @@ library(ggrepel)
 Now I'll plot **fusion point**
 
 ```{r}
+#| dev: png
 
 pcaClusterFP <- fviz_cluster(
   pcaEclust,
@@ -612,6 +629,7 @@ ggsave(
 Now, I'll plot with the **percentage of unsatyrated fatty acids**
 
 ```{r}
+#| dev: png
 
 pcaClusterUFA <- fviz_cluster(
   pcaEclust,
@@ -658,6 +676,7 @@ ggsave(
 Now with **major fatty acid chain**
 
 ```{r}
+#| dev: png
 
 pcaClusterFA <- fviz_cluster(
   pcaEclust,
@@ -704,6 +723,7 @@ ggsave(
 ## Dendrogram
 
 ```{r}
+#| dev: png
 
 #library(factoextra)
 library(dendextend)
@@ -753,6 +773,7 @@ dev.off()
 ## Heatmap
 
 ```{r}
+#| dev: png
 
 library(pheatmap)
 

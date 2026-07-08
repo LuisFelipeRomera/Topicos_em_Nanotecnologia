@@ -5,6 +5,7 @@ format: pdf
 editor: visual
 ---
 
+
 In this document, I'm going to perform **mixture designs** on the formulation data of the different *nanoparticles* based on amazonian lipids.
 
 First I'm going to explore the **PDI** measurement, than I'm going to explore the nanoparticle's **size**.
@@ -12,6 +13,7 @@ First I'm going to explore the **PDI** measurement, than I'm going to explore th
 # PDI
 
 ## Nano Bacuri-Açaí
+
 
 ```{r}
 #| message: false
@@ -59,11 +61,13 @@ par(mfrow = c(2,2))
 plot(bacuriAcaiMod1)
 ```
 
+
 ### Results PDI Bacuri-Açaí
 
 The model that fitted the PDI data the best was the linear model. Bacuri is the only variable to have a significant effect on the model. With a positive coefficient of 2.34 on an Adjusted R-Squared of 0.93.
 
 ## Nano Bacuri-Pracaxi
+
 
 ```{r}
 #| dev: png
@@ -102,11 +106,13 @@ par(mfrow = c(2, 2))
 plot(bacuriAcaiMod1)
 ```
 
+
 ### Results PDI Nano Bacuri-Pracaxi
 
 The model that best fit the data is the linear model, with Brij O10 being the only parameter that contributes individually for the model (Pr(t) \< 0.05), although both Brij O10 and Bacuri are paramenters that explain the data better than a reduced model (Pr(F) \< 0.05), with an estimate of 1.57 and -0.1, respectively.
 
 ## Nano Cacau-Tucumã
+
 
 ```{r}
 #| warning: false
@@ -147,11 +153,13 @@ par(mfrow = c(2, 2))
 plot(cacauTucumaMod1)
 ```
 
+
 ### Results PDI Nano Cacau-Tucumã
 
 No model fitted the data well (best determinant coefficient = 0.06)
 
 ## Nano Cupuaçu-Açaí
+
 
 ```{r}
 #| warning: false
@@ -192,11 +200,13 @@ par(mfrow = c(2, 2))
 plot(cupuacuAcaiMod1)
 ```
 
+
 ### Results PDI Nano Cupuaçu-Açaí
 
 The model that best fitted the data was the linear model. Açaí was the only parameter that explains the variance alone, although it, along Cupuaçu, explains the variance better than a simpler model, with an estimate of 1.16 and 0.7, respectively.
 
 ## Nano Cupuaçu-Cacau
+
 
 ```{r}
 #| warning: false
@@ -228,11 +238,13 @@ par(mfrow = c(2, 2))
 plot(cupuacuCacauMod1)
 ```
 
+
 ### Results PDI Cupuaçu-Cacau
 
 The model that fitted the data the best was the linear model, with a determinant coefficient of 0.75 and with Cupuaçu being the only parameter that contributes alone to the model and that explains the variance better than a reduced model.
 
 ## Nano Cupuaçu-Pequi
+
 
 ```{r}
 #| warning: false
@@ -293,11 +305,13 @@ mod_sat <- lm(
 anova(modScheffe, mod_sat)
 ```
 
+
 ### Results PDI Cupuaçu-Pequi
 
 The quadratic model was chosen to fit the data with an **adjusted R² = 0.91**, and with the interaction of Cupuaçuu and Pequi with an estimator of **- 3.91**.
 
 ## Nano Cupuaçu-Tucumã
+
 
 ```{r}
 
@@ -361,11 +375,13 @@ anova(cupuacuTucumaMod1, modSat)
 View(cupuacuTucuma)
 ```
 
+
 ### Results
 
 The linear model was chosen to fit the data
 
 ## Nano Manga-Andiroba
+
 
 ```{r}
 #| warning: false
@@ -428,11 +444,13 @@ anova(mangaAndirobaMod1, modSat)
 View(cupuacuTucuma)
 ```
 
+
 ### Results
 
 The **Linear Model** was chosen to fit the data.
 
 ## Nano Manga-Pracaxi
+
 
 ```{r}
 #| warning: false
@@ -495,11 +513,13 @@ anova(mangaAndirobaMod1, modSat)
 #View(cupuacuTucuma)
 ```
 
+
 ### Results
 
 The **Linear Model** was chosen to fit the data.
 
 ## Nano Murumuru-Açaí
+
 
 ```{r}
 #| warning: false
@@ -562,11 +582,13 @@ anova(modScheffe, modSat)
 View(murumuruAcai)
 ```
 
+
 ### Results
 
 We were not able to fit a model.
 
 ## Nano Murumuru-Buriti
+
 
 ```{r}
 #| warning: false
@@ -629,11 +651,13 @@ anova(murumuruBuritiMod1, modSat)
 View(murumuruBuriti)
 ```
 
+
 ### Results
 
 No model was fitted to the data.
 
 ## Nano Murumuru-Cupuaçu
+
 
 ```{r}
 #| warning: false
@@ -698,11 +722,13 @@ anova(murumuruCupuacuMod1, modSat)
 View(murumuruBuriti)
 ```
 
+
 ### Results
 
 The **Quadratic model** was chosen to fit the data.
 
 ## Nano Murumuru-Jambu
+
 
 ```{r}
 #| warning: false
@@ -767,11 +793,13 @@ anova(murumuruJambuMod1, modSat)
 #View(murumuruBuriti)
 ```
 
+
 ### Results
 
 The **Linear model** was chosen to fit the data.
 
 ## Nano Tucumã-Tucumã
+
 
 ```{r}
 #| warning: false
@@ -836,11 +864,13 @@ anova(tucumaTucumaMod2, modSat)
 #View(murumuruBuriti)
 ```
 
+
 ### Results
 
 The **Quadratic Model** was chosen to fit the data.
 
 ## Nano Tucumã-Urucum
+
 
 ```{r}
 #| warning: false
@@ -905,11 +935,13 @@ anova(tucumaTucumaMod2, modSat)
 #View(murumuruBuriti)
 ```
 
+
 ### Results
 
 The **Linear Model** was chosen to fit the data
 
 ## Nano Ucuuba-Andiroba
+
 
 ```{r}
 #| warning: false
@@ -974,11 +1006,13 @@ anova(ucuubaAndirobaMod1, modSat)
 #View(murumuruBuriti)
 ```
 
+
 ### Results
 
 The **Linear Model** was chosen to fit the data.
 
 ## Nano Ucuuba-Buriti
+
 
 ```{r}
 #| warning: false
@@ -1043,6 +1077,8 @@ anova(ucuubaBuritiMod2, modSat)
 #View(murumuruBuriti)
 ```
 
+
 ### Results
 
 The **Quadratic Model** was chosen to fit the data.
+

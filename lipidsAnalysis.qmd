@@ -1,7 +1,7 @@
 ---
 title: "Lipids Analysis"
 author: "Luís Romera"
-format: html
+format: pdf
 editor: visual
 ---
 
@@ -12,6 +12,10 @@ In this document, I'm going to analyse the relationship between the lipids used 
 First, I'm going to make a principal component analysis of the models coefficients and see what parameter each lipid pair approximates.
 
 ```{r}
+#| dev: png
+
+
+library(magick)
 coefData <- read.csv("C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/Topicos_em_Nanotecnologia/Tabela de coeficientes NanoIA.csv")
 
 head(coefData)
@@ -37,6 +41,8 @@ Now, lets try to do some plots,
 starting with the scree plot of the explained variance per dimension.
 
 ```{r}
+#| dev: png
+
 #| warning: False
 #| message: False
 
@@ -65,6 +71,7 @@ ggsave(
 First, I'll plot the parameter's vectors
 
 ```{r}
+#| dev: png
 
 PcaVar <- fviz_pca_var(
   X = coefPca,
@@ -105,6 +112,8 @@ ggsave(
 Now, I'll plot just the lipid pairs
 
 ```{r}
+#| dev: png
+
 cluster <- c(
   "Cupuaçu-Cacau",
   "Bacuri-Pracaxi",
@@ -195,6 +204,7 @@ ggsave(
 Now I shall plot the bidimensional graph with the parameter's vectors and lipid pair points.
 
 ```{r}
+#| dev: png
 
 pcaPlot <- fviz_pca(
   X = coefPca,
@@ -238,6 +248,8 @@ ggsave(
 Now I'll plot the lipid pairs with their **Scheffé equation's degree fitted**.
 
 ```{r}
+#| dev: png
+
 pcaModel <- fviz_pca_ind(
   X = coefPca,
   geom = "point",
@@ -282,6 +294,8 @@ ggsave(
 Now, I'll plot the lipid pairs with their nature as butter or oil, to identify some relationship.
 
 ```{r}
+#| dev: png
+
 coefDataComp <- read.csv("C:/Users/luisr/Documentos/Documents/Documentos - Copia/NanoIA/Topicos_em_Nanotecnologia/TabelaCoeficientesNanoIACad.csv")
 
 head(coefDataComp)
@@ -330,6 +344,7 @@ ggsave(
 Now I'll plot with the fusion point:
 
 ```{r}
+#| dev: png
 
 #install.packages("ggrepel")
 library(ggrepel)
@@ -381,6 +396,7 @@ ggsave(
 now, I'll plot the **difference of fusion points**.
 
 ```{r}
+#| dev: png
 
 pcaDeltaFP <- fviz_pca_ind(
   X = coefPca,
@@ -433,6 +449,8 @@ ggsave(
 Lets now plot the points with the **percentage of saturated fatty acids**:
 
 ```{r}
+#| dev: png
+
 pcaSfa <- fviz_pca_ind(
   X = coefPca,
   repel = TRUE,
@@ -480,6 +498,7 @@ ggsave(
 Now, I'll plot with the percentage of **unsaturated fatty acids**.
 
 ```{r}
+#| dev: png
 
 pcaUfa <- fviz_pca_ind(
   X = coefPca,
@@ -528,6 +547,7 @@ ggsave(
 Plotting now the **difference of the percentage of saturated fatty acids**.
 
 ```{r}
+#| dev: png
 
 clusterSfa <- c(
   "Ucuuba-Buriti",
@@ -615,6 +635,7 @@ ggsave(
 Now, I'll plot the points with the label of **major fatty acid per lipid**:
 
 ```{r}
+#| dev: png
 
 pcaFA <- fviz_pca_ind(
   X = coefPca,
@@ -662,6 +683,8 @@ ggsave(
 Now, I'll try to use *clustering* methods to separate the lipid pairs into **clusters** and try to extract some data.
 
 ```{r}
+#| dev: png
+
 #| message: FALSE
 
 distPair <- dist(
